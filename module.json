@@ -1,0 +1,25 @@
+{
+  "id": "gestion-harry-potter",
+  "title": "Gestion Harry Potter",
+  "description": "Outil de gestion pour campagnes Harry Potter : classes, emploi du temps, PNJ, et Coupe des Quatre Maisons.",
+  "version": "0.0.1",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "BlackboxAI"
+    }
+  ],
+  "esmodules": true,
+  "system": "pbta-improved",
+  "url": "https://github.com/Cartodream/Gestion-Harry-Potter",
+  "styles": [
+    "styles/main.css"
+  ],
+  "scripts": [
+    "scripts/main.js"
+  ]
+}
+
