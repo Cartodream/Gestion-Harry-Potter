@@ -1,0 +1,21 @@
+<div class="hp4-npcs-wrapper">
+  {{#if isGM}}
+    <p class="hp4-hint"><i class="fas fa-info-circle"></i> Glissez des acteurs depuis le répertoire</p>
+  {{/if}}
+
+  <div class="hp4-npc-drop hp4-actors-grid">
+    {{#each npcs}}
+      <div class="hp4-actor-card" data-id="{{id}}">
+        <img src="{{img}}" alt="{{name}}" />
+        <span>{{name}}</span>
+        {{#if ../isGM}}
+          <button type="button" class="hp4-remove-actor" title="Retirer">
+            <i class="fas fa-times"></i>
+          </button>
+        {{/if}}
+      </div>
+    {{else}}
+      <p class="hp4-empty">Aucun PNJ rencontré pour l'instant.</p>
+    {{/each}}
+  </div>
+</div>

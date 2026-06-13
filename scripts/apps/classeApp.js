@@ -85,12 +85,18 @@ this.element.querySelectorAll(".hp4-actor-card img").forEach(img => {
   img.style.cursor = "pointer";
   img.addEventListener("click", (e) => {
     const card = e.currentTarget.closest(".hp4-actor-card");
-    const actorId = card.querySelector(".hp4-remove-actor")?.dataset.id
-      ?? card.dataset.id;
+    const actorId = card.dataset.id;
     const actor = game.actors.get(actorId);
-    actor?.sheet?.render(true);
+    if (!actor) return;
+
+    new ImagePopout(actor.img, {
+      title: actor.name,
+      shareable: true,
+      uuid: actor.uuid
+    }).render(true);
   });
 });
+
     if (!game.user.isGM) return;
 
     // Drag & drop sur chaque zone de maison

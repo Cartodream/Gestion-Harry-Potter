@@ -1,5 +1,7 @@
 import { MODULE_ID } from "../constants.js";
 import { ClassesApp } from "./classeApp.js";
+import { NpcsApp } from "./npcsApp.js";
+import { HouseCupApp } from "./houseCupApp.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -31,7 +33,11 @@ export class GestionHarryPotterApp extends HandlebarsApplicationMixin(Applicatio
 
   _onRender(context, options) {
     super._onRender(context, options);
+    this.element.querySelector("[data-action='open-npcs']")
+  ?.addEventListener("click", () => new NpcsApp().render(true));
 
+this.element.querySelector("[data-action='open-house-cup']")
+  ?.addEventListener("click", () => new HouseCupApp().render(true));
     this.element.querySelector("[data-action='open-classes']")
       ?.addEventListener("click", () => new ClassesApp().render(true));
 
