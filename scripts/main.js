@@ -25,9 +25,11 @@ Hooks.once("init", function () {
 });
 
 Hooks.once("ready", function () {
+  console.debug(`[${MODULE_ID}] ready() user isGM=${game.user?.isGM}`);
   if (!game.user?.isGM) return;
   console.debug(`[${MODULE_ID}] Module loaded`);
   registerSidebar();
+
 
   const autoOpen = game.settings.get(MODULE_ID, "auto-open") ?? false;
   if (autoOpen) {

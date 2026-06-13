@@ -1,32 +1,43 @@
 import { MODULE_ID } from "../constants.js";
 
-export class GestionHarryPotterApp extends Application {
-  static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      id: "gestion-harry-potter-app",
-      classes: ["hp4-main"],
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class GestionHarryPotterApp extends HandlebarsApplicationMixin(ApplicationV2) {
+  static DEFAULT_OPTIONS = {
+    id: "gestion-harry-potter-app",
+    classes: ["hp4-main"],
+    window: {
       title: "Gestion Harry Potter",
-      template: "modules/gestion-harry-potter/templates/main.hbs",
+      resizable: true,
+    },
+    position: {
       width: 700,
       height: "auto",
-      resizable: true,
-      tabs: []
-    });
-  }
+    },
+  };
 
-  getData() {
+  static PARTS = {
+    main: {
+      template: "modules/gestion-harry-potter/templates/main.hbs",
+    },
+  };
+
+  async _prepareContext() {
     return {
-      moduleId: MODULE_ID
+      moduleId: MODULE_ID,
     };
   }
 
-  activateListeners(html) {
-    super.activateListeners(html);
+  _onRender(context, options) {
+    super._onRender(context, options);
 
-    html.find("[data-action='open-classes']").on("click", () => {});
-    html.find("[data-action='open-timetable']").on("click", () => {});
-    html.find("[data-action='open-npcs']").on("click", () => {});
-    html.find("[data-action='open-house-cup']").on("click", () => {});
+    this.element.querySelector("[data-action='open-classes']")
+      ?.addEventListener("click", () => {});
+    this.element.querySelector("[data-action='open-timetable']")
+      ?.addEventListener("click", () => {});
+    this.element.querySelector("[data-action='open-npcs']")
+      ?.addEventListener("click", () => {});
+    this.element.querySelector("[data-action='open-house-cup']")
+      ?.addEventListener("click", () => {});
   }
 }
-
