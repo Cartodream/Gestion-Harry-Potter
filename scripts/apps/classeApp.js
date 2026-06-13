@@ -5,6 +5,13 @@ const YEARS = [
   "5ème année", "6ème année", "7ème année"
 ];
 
+const HOUSES = [
+  { key: "gryffondor", label: "Gryffondor", icon: "fas fa-lion" },
+  { key: "serdaigle",  label: "Serdaigle",  icon: "fas fa-crow" },
+  { key: "poufsouffle",label: "Poufsouffle",icon: "fas fa-badger" },
+  { key: "serpentard", label: "Serpentard", icon: "fas fa-snake" },
+];
+
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
@@ -12,7 +19,7 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
     id: "hp4-classes-app",
     classes: ["hp4-classes"],
     window: { title: "Classes de Poudlard", resizable: true },
-    position: { width: 800, height: 600 },
+    position: { width: 900, height: 650 },
   };
 
   static PARTS = {
@@ -37,22 +44,28 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     const years = YEARS.map((label, index) => {
       const yearKey = `year-${index + 1}`;
-      const actorIds = classData[yearKey] ?? [];
-      const actors = actorIds
-        .map(id => game.actors.get(id))
-        .filter(Boolean)
-        .map(a => ({ id: a.id, name: a.name, img: a.img }));
+
+      // actors[houseKey] = tableau d'acteurs
+      const actors = {};
+      for (const house of HOUSES) {
+        const storageKey = `${yearKey}-${house.key}`;
+        const ids = classData[storageKey] ?? [];
+        actors[house.key] = ids
+          .map(id => game.actors.get(id))
+          .filter(Boolean)
+          .map(a => ({ id: a.id, name: a.name, img: a.img }));
+      }
 
       return { label, yearKey, actors };
     });
 
-    return { years, isGM };
+    return { years, houses: HOUSES, isGM };
   }
 
   _onRender(context, options) {
     super._onRender(context, options);
 
-    // Gestion des onglets
+    // Onglets par année
     const tabs = this.element.querySelectorAll(".hp4-year-tab");
     const panels = this.element.querySelectorAll(".hp4-year-panel");
 
@@ -67,11 +80,21 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
         panels[i]?.classList.add("active");
       });
     });
-
+// Clic sur un acteur → ouvre sa fiche (pour tous)
+this.element.querySelectorAll(".hp4-actor-card img").forEach(img => {
+  img.style.cursor = "pointer";
+  img.addEventListener("click", (e) => {
+    const card = e.currentTarget.closest(".hp4-actor-card");
+    const actorId = card.querySelector(".hp4-remove-actor")?.dataset.id
+      ?? card.dataset.id;
+    const actor = game.actors.get(actorId);
+    actor?.sheet?.render(true);
+  });
+});
     if (!game.user.isGM) return;
 
-    // Drag & drop et suppression (GM uniquement)
-    this.element.querySelectorAll(".hp4-year-drop").forEach(zone => {
+    // Drag & drop sur chaque zone de maison
+    this.element.querySelectorAll(".hp4-house-drop").forEach(zone => {
       zone.addEventListener("dragover", e => {
         e.preventDefault();
         zone.classList.add("drag-over");
@@ -93,26 +116,30 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
         const actorId = data.uuid?.split(".").pop() ?? data.id;
         const yearKey = zone.dataset.year;
+        const houseKey = zone.dataset.house;
+        const storageKey = `${yearKey}-${houseKey}`;
+
         const classData = ClassesApp.getClassData();
-        const list = classData[yearKey] ?? [];
+        const list = classData[storageKey] ?? [];
 
         if (!list.includes(actorId)) {
           list.push(actorId);
-          classData[yearKey] = list;
+          classData[storageKey] = list;
           await ClassesApp.saveClassData(classData);
           this.render();
         }
       });
+    });
 
-      zone.querySelectorAll(".hp4-remove-actor").forEach(btn => {
-        btn.addEventListener("click", async (e) => {
-          const actorId = e.currentTarget.dataset.id;
-          const yearKey = zone.dataset.year;
-          const classData = ClassesApp.getClassData();
-          classData[yearKey] = (classData[yearKey] ?? []).filter(id => id !== actorId);
-          await ClassesApp.saveClassData(classData);
-          this.render();
-        });
+    // Boutons supprimer
+    this.element.querySelectorAll(".hp4-remove-actor").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const { id: actorId, year: yearKey, house: houseKey } = e.currentTarget.dataset;
+        const storageKey = `${yearKey}-${houseKey}`;
+        const classData = ClassesApp.getClassData();
+        classData[storageKey] = (classData[storageKey] ?? []).filter(id => id !== actorId);
+        await ClassesApp.saveClassData(classData);
+        this.render();
       });
     });
   }

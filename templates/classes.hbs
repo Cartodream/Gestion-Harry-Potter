@@ -8,27 +8,41 @@
   <div class="hp4-year-panels">
     {{#each years}}
       <div class="hp4-year-panel hp4-year-drop" data-year="{{yearKey}}">
-        <h3>{{label}}</h3>
+        <div class="hp4-houses-grid">
 
-        {{#if ../isGM}}
-          <p class="hp4-hint"><i class="fas fa-info-circle"></i> Glissez des acteurs depuis le répertoire</p>
-        {{/if}}
-
-        <div class="hp4-actors-grid">
-          {{#each actors}}
-            <div class="hp4-actor-card">
-              <img src="{{img}}" alt="{{name}}" />
-              <span>{{name}}</span>
-              {{#if ../../isGM}}
-                <button type="button" class="hp4-remove-actor" data-id="{{id}}" title="Retirer">
-                  <i class="fas fa-times"></i>
-                </button>
-              {{/if}}
+          {{#each ../houses}}
+          <div class="hp4-house-zone hp4-house-drop"
+               data-year="{{../yearKey}}"
+               data-house="{{key}}">
+            <h4 class="hp4-house-title hp4-house-{{key}}">
+              <i class="{{icon}}"></i> {{label}}
+            </h4>
+            <div class="hp4-actors-grid">
+              {{#each (lookup ../actors key)}}
+                  <div class="hp4-actor-card" data-id="{{id}}">
+                  <img src="{{img}}" alt="{{name}}" />
+                  <span>{{name}}</span>
+                  {{#if ../../../../isGM}}
+                    <button type="button" class="hp4-remove-actor"
+                            data-id="{{id}}"
+                            data-year="{{../../yearKey}}"
+                            data-house="{{../key}}"
+                            title="Retirer">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  {{/if}}
+                </div>
+              {{else}}
+                <p class="hp4-empty">Aucun élève</p>
+              {{/each}}
             </div>
-          {{else}}
-            <p class="hp4-empty">Aucun élève dans cette année.</p>
+          </div>
           {{/each}}
+
         </div>
+        {{#if ../isGM}}
+          <p class="hp4-hint"><i class="fas fa-info-circle"></i> Glissez des acteurs dans une maison</p>
+        {{/if}}
       </div>
     {{/each}}
   </div>
