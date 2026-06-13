@@ -2,6 +2,7 @@
 
 import { MODULE_ID } from "./constants.js";
 import { registerSidebar } from "./sidebar/sidebar.js";
+import { GestionHarryPotterApp } from "./apps/mainApp.js";
 
 Hooks.once("init", function () {
   game.settings.register(MODULE_ID, "debug", {
@@ -13,7 +14,6 @@ Hooks.once("init", function () {
     default: false
   });
 
-  // Setting optionnel de secours
   game.settings.register(MODULE_ID, "auto-open", {
     name: "Auto-ouvrir",
     hint: "Ouvre le panneau de gestion au chargement (GM uniquement).",
@@ -22,22 +22,23 @@ Hooks.once("init", function () {
     type: Boolean,
     default: false
   });
+
+  game.settings.register(MODULE_ID, "classes-data", {
+    scope: "world",
+    config: false,
+    type: Object,
+    default: {}
+  });
 });
 
 Hooks.once("ready", function () {
-  console.debug(`[${MODULE_ID}] ready() user isGM=${game.user?.isGM}`);
-  if (!game.user?.isGM) return;
   console.debug(`[${MODULE_ID}] Module loaded`);
   registerSidebar();
 
-
-  const autoOpen = game.settings.get(MODULE_ID, "auto-open") ?? false;
-  if (autoOpen) {
-    // Import dynamique pour éviter d'importer inutilement au boot
-    import("./apps/mainApp.js").then(({ GestionHarryPotterApp }) => {
+  if (game.user?.isGM) {
+    const autoOpen = game.settings.get(MODULE_ID, "auto-open") ?? false;
+    if (autoOpen) {
       new GestionHarryPotterApp().render(true);
-    });
+    }
   }
 });
-
-

@@ -6,10 +6,7 @@ export function registerSidebar() {
     if (document.querySelector(".hp4-sidebar-tab")) return;
 
     const menu = document.querySelector("#sidebar .tabs menu");
-    if (!menu) {
-      console.warn(`[${MODULE_ID}] Sidebar menu not found`);
-      return;
-    }
+    if (!menu) return;
 
     const li = document.createElement("li");
     const btn = document.createElement("button");

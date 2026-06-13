@@ -1,0 +1,101 @@
+.hp4-classes-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0.5rem;
+}
+
+.hp4-year-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.hp4-year-tab {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid #555;
+  background: #2a2a2a;
+  color: #ccc;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.hp4-year-tab.active {
+  background: #7b2d2d;
+  color: #fff;
+  border-color: #a84444;
+}
+
+.hp4-year-panel {
+  display: none;
+  flex-direction: column;
+  min-height: 200px;
+  border: 2px dashed transparent;
+  border-radius: 6px;
+  padding: 0.5rem;
+  transition: border-color 0.2s;
+}
+
+.hp4-year-panel.active {
+  display: flex;
+}
+
+.hp4-year-panel.drag-over {
+  border-color: #a84444;
+  background: rgba(168, 68, 68, 0.1);
+}
+
+.hp4-actors-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.hp4-actor-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.hp4-actor-card img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #555;
+}
+
+.hp4-remove-actor {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #7b2d2d;
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hp4-hint {
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0;
+}
+
+.hp4-empty {
+  color: #666;
+  font-style: italic;
+  font-size: 0.85rem;
+}
