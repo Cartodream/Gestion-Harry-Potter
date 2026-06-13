@@ -1,4 +1,5 @@
 import { MODULE_ID } from "../constants.js";
+import { ClassesApp } from "./classeApp.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -32,11 +33,14 @@ export class GestionHarryPotterApp extends HandlebarsApplicationMixin(Applicatio
     super._onRender(context, options);
 
     this.element.querySelector("[data-action='open-classes']")
-      ?.addEventListener("click", () => {});
+      ?.addEventListener("click", () => new ClassesApp().render(true));
+
     this.element.querySelector("[data-action='open-timetable']")
       ?.addEventListener("click", () => {});
+
     this.element.querySelector("[data-action='open-npcs']")
       ?.addEventListener("click", () => {});
+
     this.element.querySelector("[data-action='open-house-cup']")
       ?.addEventListener("click", () => {});
   }
