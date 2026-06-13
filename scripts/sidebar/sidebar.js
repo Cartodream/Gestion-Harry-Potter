@@ -2,25 +2,30 @@ import { MODULE_ID } from "../constants.js";
 import { GestionHarryPotterApp } from "../apps/mainApp.js";
 
 export function registerSidebar() {
-  try {
-    const sidebarEl = document.querySelector("#sidebar");
-    if (!sidebarEl) {
-      console.warn(`[${MODULE_ID}] #sidebar not found`);
+  // En Foundry v14, les onglets sidebar sont dans #sidebar > .tabs
+  Hooks.on("renderSidebar", () => {
+    // Évite les doublons si re-render
+    if (document.querySelector(".hp4-sidebar-tab")) return;
+
+    const tabsEl = document.querySelector("#sidebar .tabs");
+    if (!tabsEl) {
+      console.warn(`[${MODULE_ID}] Sidebar tabs not found`);
       return;
     }
 
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "hp4-sidebar-btn";
-    btn.innerHTML = `<i class="fas fa-chalkboard"></i><span>Gestion</span>`;
-    btn.dataset.action = "open-hp4";
+    // Crée un onglet comme les autres (même structure que Foundry)
+    const tab = document.createElement("a");
+    tab.className = "item hp4-sidebar-tab";
+    tab.dataset.tab = "hp4-gestion";
+    tab.dataset.tooltip = "Gestion Harry Potter";
+    tab.innerHTML = `<i class="fas fa-chalkboard"></i>`;
 
-    sidebarEl.appendChild(btn);
+    tabsEl.appendChild(tab);
 
-    btn.addEventListener("click", () => {
+    tab.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       new GestionHarryPotterApp().render(true);
     });
-  } catch (e) {
-    console.error(`[${MODULE_ID}] Failed to register sidebar button`, e);
-  }
+  });
 }
