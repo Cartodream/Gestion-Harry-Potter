@@ -1,4 +1,4 @@
-# Gestion Harry Potter (Foundry VTT)
+# Gestion Harry Potter (Foundry VTT v14+)
 
 ## Description
 Module pour **Foundry VTT** permettant de gérer une campagne basée sur *Harry Potter* :
@@ -6,6 +6,8 @@ Module pour **Foundry VTT** permettant de gérer une campagne basée sur *Harry 
 - Emploi du temps
 - PNJ rencontrés
 - Coupe des 4 maisons
+
+> Module en construction : les boutons ouvrent bientôt des écrans dédiés.
 
 ## Prérequis
 - **Foundry VTT v14+**
@@ -16,17 +18,14 @@ Module pour **Foundry VTT** permettant de gérer une campagne basée sur *Harry 
 2. Démarrer Foundry
 3. Activer le module dans **Module Management**
 
-## Développement / Structure
-- `module.json` : manifest du module
-- `scripts/main.js` : enregistrement des hooks
-- `scripts/apps/mainApp.js` : UI principale
+## Structure
+- `module.json` : manifest Foundry
+- `scripts/main.js` : hooks et initialisation
+- `scripts/apps/mainApp.js` : UI principale (Application)
 - `scripts/sidebar/sidebar.js` : bouton dans la sidebar
 - `templates/main.hbs` : template Handlebars
-- `styles/main.css` : style
+- `styles/main.css` : styles
 
-## Note
-Le module est actuellement dans une phase de construction : les boutons ouvrent bientôt des écrans dédiés.
-
-## Licence
-(à compléter)
+## Lien GitHub
+https://github.com/Cartodream/Gestion-Harry-Potter
 
