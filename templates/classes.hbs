@@ -9,7 +9,6 @@
     {{#each years}}
       <div class="hp4-year-panel hp4-year-drop" data-year="{{yearKey}}">
         <div class="hp4-houses-grid">
-
           {{#each ../houses}}
           <div class="hp4-house-zone hp4-house-drop"
                data-year="{{../yearKey}}"
@@ -19,7 +18,7 @@
             </h4>
             <div class="hp4-actors-grid">
               {{#each (lookup ../actors key)}}
-                  <div class="hp4-actor-card" data-id="{{id}}">
+                <div class="hp4-actor-card" data-id="{{id}}">
                   <img src="{{img}}" alt="{{name}}" />
                   <span>{{name}}</span>
                   {{#if ../../../../isGM}}
@@ -31,6 +30,12 @@
                       <i class="fas fa-times"></i>
                     </button>
                   {{/if}}
+                  <button type="button" class="hp4-note-btn" data-id="{{id}}" title="Notes">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  {{#if (lookup ../../../../actorNotes id)}}
+                    <div class="hp4-actor-note">{{lookup ../../../../actorNotes id}}</div>
+                  {{/if}}
                 </div>
               {{else}}
                 <p class="hp4-empty">Aucun élève</p>
@@ -38,12 +43,23 @@
             </div>
           </div>
           {{/each}}
-
         </div>
         {{#if ../isGM}}
           <p class="hp4-hint"><i class="fas fa-info-circle"></i> Glissez des acteurs dans une maison</p>
         {{/if}}
       </div>
     {{/each}}
+  </div>
+</div>
+
+<!-- Modal note -->
+<div class="hp4-note-modal" style="display:none">
+  <div class="hp4-note-modal-inner">
+    <h3>Note sur <span class="hp4-note-actor-name"></span></h3>
+    <textarea class="hp4-note-textarea" rows="5" placeholder="Entrez une note..."></textarea>
+    <div class="hp4-note-actions">
+      <button type="button" class="hp4-note-save">Enregistrer</button>
+      <button type="button" class="hp4-note-cancel">Annuler</button>
+    </div>
   </div>
 </div>

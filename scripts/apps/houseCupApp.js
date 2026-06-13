@@ -38,6 +38,7 @@ export class HouseCupApp extends HandlebarsApplicationMixin(ApplicationV2) {
       ...h,
       points: points[h.key] ?? 0,
       percent: Math.round(((points[h.key] ?? 0) / total) * 100),
+      negative: (points[h.key] ?? 0) < 0,  // ← géré ici
     }));
 
     return { houses, isGM: game.user.isGM };
@@ -55,7 +56,7 @@ export class HouseCupApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
         const points = HouseCupApp.getPoints();
         const current = points[house] ?? 0;
-        points[house] = Math.max(0, action === "add" ? current + amount : current - amount);
+        points[house] = action === "add" ? current + amount : current - amount;
 
         await HouseCupApp.savePoints(points);
         this.render();

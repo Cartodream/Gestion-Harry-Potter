@@ -1,4 +1,5 @@
 import { MODULE_ID } from "../constants.js";
+import { getActorNotes, registerNoteModal } from "../utils/notes.js";
 
 const YEARS = [
   "1ère année", "2ème année", "3ème année", "4ème année",
@@ -41,6 +42,7 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
   async _prepareContext() {
     const classData = ClassesApp.getClassData();
     const isGM = game.user.isGM;
+   const actorNotes = getActorNotes();  // ← ajoute ça
 
     const years = YEARS.map((label, index) => {
       const yearKey = `year-${index + 1}`;
@@ -59,12 +61,13 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
       return { label, yearKey, actors };
     });
 
-    return { years, houses: HOUSES, isGM };
+      return { years, houses: HOUSES, isGM, actorNotes };
   }
 
   _onRender(context, options) {
     super._onRender(context, options);
-
+// Notes
+registerNoteModal(this);
     // Onglets par année
     const tabs = this.element.querySelectorAll(".hp4-year-tab");
     const panels = this.element.querySelectorAll(".hp4-year-panel");
@@ -98,7 +101,20 @@ this.element.querySelectorAll(".hp4-actor-card img").forEach(img => {
 });
 
     if (!game.user.isGM) return;
-
+// Clic portrait → ImagePopout
+this.element.querySelectorAll(".hp4-actor-card img").forEach(img => {
+  img.style.cursor = "pointer";
+  img.addEventListener("click", (e) => {
+    const actorId = e.currentTarget.closest(".hp4-actor-card").dataset.id;
+    const actor = game.actors.get(actorId);
+    if (!actor) return;
+    new ImagePopout(actor.img, {
+      title: actor.name,
+      shareable: true,
+      uuid: actor.uuid
+    }).render(true);
+  });
+});
     // Drag & drop sur chaque zone de maison
     this.element.querySelectorAll(".hp4-house-drop").forEach(zone => {
       zone.addEventListener("dragover", e => {

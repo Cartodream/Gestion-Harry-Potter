@@ -86,7 +86,9 @@
   font-size: 1.1rem;
   font-weight: bold;
 }
-
+.hp4-cup-points.negative {
+  color: #e74c3c;
+}
 .hp4-cup-controls {
   display: flex;
   align-items: center;

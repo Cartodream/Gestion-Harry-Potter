@@ -15,12 +15,12 @@
       </div>
 
       <div class="hp4-cup-label">{{label}}</div>
-      <div class="hp4-cup-points">{{points}} pts</div>
+      <div class="hp4-cup-points {{#if negative}}negative{{/if}}">{{points}} pts</div>
 
       {{#if ../isGM}}
       <div class="hp4-cup-controls">
         <button type="button" class="hp4-cup-btn" data-house="{{key}}" data-action="remove">−</button>
-        <input type="number" class="hp4-points-input" data-house="{{key}}" value="10" min="1" style="width:50px; text-align:center" />
+<input type="number" class="hp4-points-input" data-house="{{key}}" value="10" min="1" style="width:50px; text-align:center" />
         <button type="button" class="hp4-cup-btn" data-house="{{key}}" data-action="add">+</button>
       </div>
       {{/if}}

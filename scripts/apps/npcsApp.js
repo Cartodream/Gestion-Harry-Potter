@@ -1,4 +1,5 @@
 import { MODULE_ID } from "../constants.js";
+import { getActorNotes, registerNoteModal } from "../utils/notes.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -24,18 +25,20 @@ export class NpcsApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   async _prepareContext() {
-    const ids = NpcsApp.getNpcData();
-    const npcs = ids
-      .map(id => game.actors.get(id))
-      .filter(Boolean)
-      .map(a => ({ id: a.id, name: a.name, img: a.img }));
+  const ids = NpcsApp.getNpcData();
+  const notes = getActorNotes();
+  const npcs = ids
+    .map(id => game.actors.get(id))
+    .filter(Boolean)
+    .map(a => ({ id: a.id, name: a.name, img: a.img, note: notes[a.id] ?? "" }));
 
-    return { npcs, isGM: game.user.isGM };
-  }
+  return { npcs, isGM: game.user.isGM };
+}
 
   _onRender(context, options) {
     super._onRender(context, options);
-
+    // Notes
+registerNoteModal(this);
     // Clic portrait → ImagePopout
     this.element.querySelectorAll(".hp4-actor-card img").forEach(img => {
       img.style.cursor = "pointer";
