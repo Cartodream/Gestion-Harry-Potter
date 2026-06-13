@@ -7,10 +7,10 @@ const YEARS = [
 ];
 
 const HOUSES = [
-  { key: "gryffondor", label: "Gryffondor", icon: "fas fa-lion" },
-  { key: "serdaigle",  label: "Serdaigle",  icon: "fas fa-crow" },
-  { key: "poufsouffle",label: "Poufsouffle",icon: "fas fa-badger" },
-  { key: "serpentard", label: "Serpentard", icon: "fas fa-snake" },
+  { key: "gryffondor",  label: "Gryffondor",  icon: "fas fa-fire" },
+  { key: "serdaigle",   label: "Serdaigle",    icon: "fas fa-feather" },
+  { key: "poufsouffle", label: "Poufsouffle",  icon: "fas fa-leaf" },
+  { key: "serpentard",  label: "Serpentard",   icon: "fas fa-moon" },
 ];
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -28,11 +28,8 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
   };
 
   static getClassData() {
-    try {
-      return game.settings.get(MODULE_ID, "classes-data") ?? {};
-    } catch {
-      return {};
-    }
+    try { return game.settings.get(MODULE_ID, "classes-data") ?? {}; }
+    catch { return {}; }
   }
 
   static async saveClassData(data) {
@@ -42,12 +39,10 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
   async _prepareContext() {
     const classData = ClassesApp.getClassData();
     const isGM = game.user.isGM;
-   const actorNotes = getActorNotes();  // ← ajoute ça
+    const actorNotes = getActorNotes();
 
     const years = YEARS.map((label, index) => {
       const yearKey = `year-${index + 1}`;
-
-      // actors[houseKey] = tableau d'acteurs
       const actors = {};
       for (const house of HOUSES) {
         const storageKey = `${yearKey}-${house.key}`;
@@ -57,17 +52,15 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
           .filter(Boolean)
           .map(a => ({ id: a.id, name: a.name, img: a.img }));
       }
-
       return { label, yearKey, actors };
     });
 
-      return { years, houses: HOUSES, isGM, actorNotes };
+    return { years, houses: HOUSES, isGM, actorNotes };
   }
 
   _onRender(context, options) {
     super._onRender(context, options);
-// Notes
-registerNoteModal(this);
+
     // Onglets par année
     const tabs = this.element.querySelectorAll(".hp4-year-tab");
     const panels = this.element.querySelectorAll(".hp4-year-panel");
@@ -83,38 +76,27 @@ registerNoteModal(this);
         panels[i]?.classList.add("active");
       });
     });
-// Clic sur un acteur → ouvre sa fiche (pour tous)
-this.element.querySelectorAll(".hp4-actor-card img").forEach(img => {
-  img.style.cursor = "pointer";
-  img.addEventListener("click", (e) => {
-    const card = e.currentTarget.closest(".hp4-actor-card");
-    const actorId = card.dataset.id;
-    const actor = game.actors.get(actorId);
-    if (!actor) return;
 
-    new ImagePopout(actor.img, {
-      title: actor.name,
-      shareable: true,
-      uuid: actor.uuid
-    }).render(true);
-  });
-});
+    // Clic portrait → ImagePopout (pour tous)
+    this.element.querySelectorAll(".hp4-actor-card img").forEach(img => {
+      img.style.cursor = "pointer";
+      img.addEventListener("click", (e) => {
+        const actorId = e.currentTarget.closest(".hp4-actor-card").dataset.id;
+        const actor = game.actors.get(actorId);
+        if (!actor) return;
+        new ImagePopout(actor.img, {
+          title: actor.name,
+          shareable: true,
+          uuid: actor.uuid
+        }).render(true);
+      });
+    });
+
+    // Notes (pour tous)
+    registerNoteModal(this);
 
     if (!game.user.isGM) return;
-// Clic portrait → ImagePopout
-this.element.querySelectorAll(".hp4-actor-card img").forEach(img => {
-  img.style.cursor = "pointer";
-  img.addEventListener("click", (e) => {
-    const actorId = e.currentTarget.closest(".hp4-actor-card").dataset.id;
-    const actor = game.actors.get(actorId);
-    if (!actor) return;
-    new ImagePopout(actor.img, {
-      title: actor.name,
-      shareable: true,
-      uuid: actor.uuid
-    }).render(true);
-  });
-});
+
     // Drag & drop sur chaque zone de maison
     this.element.querySelectorAll(".hp4-house-drop").forEach(zone => {
       zone.addEventListener("dragover", e => {
