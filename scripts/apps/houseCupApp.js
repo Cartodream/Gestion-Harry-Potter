@@ -32,7 +32,7 @@ export class HouseCupApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
   async _prepareContext() {
     const points = HouseCupApp.getPoints();
-    const total = Object.values(points).reduce((s, v) => s + (v ?? 0), 0) || 1;
+    const total = Math.max(Object.values(points).reduce((s, v) => s + Math.max(v ?? 0, 0), 0), 1);
 
     const houses = HOUSES.map(h => ({
       ...h,

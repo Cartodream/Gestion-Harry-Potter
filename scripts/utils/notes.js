@@ -28,6 +28,10 @@ export async function deleteActorNote(actorId, index) {
   await game.settings.set(MODULE_ID, "actor-notes", all);
 }
 
+function escapeHtml(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
 export function registerNoteModal(app) {
   const modal = app.element.querySelector(".hp4-note-modal");
   if (!modal) return;
@@ -52,11 +56,11 @@ export function registerNoteModal(app) {
         : entries.map((e, i) => `
             <div class="hp4-journal-entry">
               <div class="hp4-journal-meta">
-                <span class="hp4-journal-author">${e.author}</span>
-                <span class="hp4-journal-date">${e.date}</span>
+                <span class="hp4-journal-author">${escapeHtml(e.author)}</span>
+                <span class="hp4-journal-date">${escapeHtml(e.date)}</span>
                 ${game.user.isGM ? `<button type="button" class="hp4-journal-delete" data-index="${i}" title="Supprimer"><i class="fas fa-trash"></i></button>` : ""}
               </div>
-              <div class="hp4-journal-text">${e.text}</div>
+              <div class="hp4-journal-text">${escapeHtml(e.text)}</div>
             </div>
           `).join("");
 

@@ -41,9 +41,9 @@ Hooks.once("init", function () {
   game.settings.register(MODULE_ID, "actor-notes", {
     scope: "world", config: false, type: Object, default: {}
   });
-game.settings.register(MODULE_ID, "timetable-data", {
-  scope: "world", config: false, type: Object, default: {}
-});
+  game.settings.register(MODULE_ID, "timetable-data", {
+    scope: "world", config: false, type: Object, default: {}
+  });
   game.settings.register(MODULE_ID, "clubs-data", {
     scope: "world", config: false, type: Object, default: {}
   });

@@ -36,23 +36,15 @@ export class GestionHarryPotterApp extends HandlebarsApplicationMixin(Applicatio
 
   _onRender(context, options) {
     super._onRender(context, options);
-    this.element.querySelector("[data-action='open-npcs']")
-  ?.addEventListener("click", () => new NpcsApp().render(true));
-this.element.querySelector("[data-action='open-clubs']")
-  ?.addEventListener("click", () => new ClubsApp().render(true));
-this.element.querySelector("[data-action='open-house-cup']")
-  ?.addEventListener("click", () => new HouseCupApp().render(true));
     this.element.querySelector("[data-action='open-classes']")
       ?.addEventListener("click", () => new ClassesApp().render(true));
-
     this.element.querySelector("[data-action='open-timetable']")
-      ?.addEventListener("click", () => {});
-this.element.querySelector("[data-action='open-timetable']")
-  ?.addEventListener("click", () => new TimetableApp().render(true));
+      ?.addEventListener("click", () => new TimetableApp().render(true));
     this.element.querySelector("[data-action='open-npcs']")
-      ?.addEventListener("click", () => {});
-
+      ?.addEventListener("click", () => new NpcsApp().render(true));
     this.element.querySelector("[data-action='open-house-cup']")
-      ?.addEventListener("click", () => {});
+      ?.addEventListener("click", () => new HouseCupApp().render(true));
+    this.element.querySelector("[data-action='open-clubs']")
+      ?.addEventListener("click", () => new ClubsApp().render(true));
   }
 }

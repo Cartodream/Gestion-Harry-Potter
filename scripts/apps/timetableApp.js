@@ -48,12 +48,16 @@ export class TimetableApp extends HandlebarsApplicationMixin(ApplicationV2) {
     // Construire les colonnes par jour
     const days = DAYS.map((label, dayIndex) => {
       const events = Object.entries(data)
-        .filter(([, e]) => e.day === dayIndex)
-        .map(([id, e]) => {
-          const top = ((e.startHour - START_HOUR) / TOTAL_HOURS) * 100;
-          const height = ((e.endHour - e.startHour) / TOTAL_HOURS) * 100;
-          return { id, ...e, top, height };
-        });
+  .filter(([, e]) => e.day === dayIndex)
+  .map(([id, e]) => {
+    const top = ((e.startHour - START_HOUR) / TOTAL_HOURS) * 100;
+    const height = ((e.endHour - e.startHour) / TOTAL_HOURS) * 100;
+    return {
+      id, ...e, top, height,
+      startLabel: formatHour(e.startHour),  // ← formaté
+      endLabel: formatHour(e.endHour),       // ← formaté
+    };
+  });
       return { label, dayIndex, events };
     });
 
