@@ -99,18 +99,23 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     // Rendre les cartes existantes draggables
     this.element.querySelectorAll(".hp4-actor-card[draggable='true']").forEach(card => {
-      card.addEventListener("dragstart", (e) => {
-        e.dataTransfer.setData("text/plain", JSON.stringify({
-          type: "hp4-actor-move",
-          actorId: card.dataset.id,
-          sourceYear: card.dataset.sourceYear,
-          sourceHouse: card.dataset.sourceHouse,
-        }));
-        card.classList.add("dragging");
-      });
-      card.addEventListener("dragend", () => card.classList.remove("dragging"));
-    });
-
+  card.addEventListener("dragstart", (e) => {
+    // Ignorer si on drag depuis un bouton
+    if (e.target.closest("button")) {
+      e.preventDefault();
+      return;
+    }
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", JSON.stringify({
+      type: "hp4-actor-move",
+      actorId: card.dataset.id,
+      sourceYear: card.dataset.sourceYear,
+      sourceHouse: card.dataset.sourceHouse,
+    }));
+    setTimeout(() => card.classList.add("dragging"), 0);
+  });
+  card.addEventListener("dragend", () => card.classList.remove("dragging"));
+});
     // Drop sur chaque zone de maison
     this.element.querySelectorAll(".hp4-house-drop").forEach(zone => {
       zone.addEventListener("dragover", e => {
