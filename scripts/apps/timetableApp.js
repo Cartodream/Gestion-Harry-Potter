@@ -6,7 +6,11 @@ const DAYS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dima
 const START_HOUR = 7;
 const END_HOUR = 22;
 const TOTAL_HOURS = END_HOUR - START_HOUR;
-
+function formatHour(decimal) {
+  const h = Math.floor(decimal);
+  const m = Math.round((decimal - h) * 60);
+  return m === 0 ? `${h}h` : `${h}h${String(m).padStart(2, "0")}`;
+}
 export class TimetableApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
     id: "hp4-timetable-app",

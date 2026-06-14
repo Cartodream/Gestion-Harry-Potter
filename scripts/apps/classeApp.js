@@ -97,7 +97,21 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     if (!game.user.isGM) return;
 
-    // Drag & drop sur chaque zone de maison
+    // Rendre les cartes existantes draggables
+    this.element.querySelectorAll(".hp4-actor-card[draggable='true']").forEach(card => {
+      card.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", JSON.stringify({
+          type: "hp4-actor-move",
+          actorId: card.dataset.id,
+          sourceYear: card.dataset.sourceYear,
+          sourceHouse: card.dataset.sourceHouse,
+        }));
+        card.classList.add("dragging");
+      });
+      card.addEventListener("dragend", () => card.classList.remove("dragging"));
+    });
+
+    // Drop sur chaque zone de maison
     this.element.querySelectorAll(".hp4-house-drop").forEach(zone => {
       zone.addEventListener("dragover", e => {
         e.preventDefault();
@@ -112,23 +126,44 @@ export class ClassesApp extends HandlebarsApplicationMixin(ApplicationV2) {
         e.preventDefault();
         zone.classList.remove("drag-over");
 
-        let data;
-        try { data = JSON.parse(e.dataTransfer.getData("text/plain")); }
+        const targetYear = zone.dataset.year;
+        const targetHouse = zone.dataset.house;
+
+        let raw;
+        try { raw = JSON.parse(e.dataTransfer.getData("text/plain")); }
         catch { return; }
 
-        if (data.type !== "Actor") return;
-
-        const actorId = data.uuid?.split(".").pop() ?? data.id;
-        const yearKey = zone.dataset.year;
-        const houseKey = zone.dataset.house;
-        const storageKey = `${yearKey}-${houseKey}`;
-
         const classData = ClassesApp.getClassData();
-        const list = classData[storageKey] ?? [];
 
+        // Cas 1 : déplacement d'une carte existante entre maisons
+        if (raw.type === "hp4-actor-move") {
+          const { actorId, sourceYear, sourceHouse } = raw;
+          const sourceKey = `${sourceYear}-${sourceHouse}`;
+          const targetKey = `${targetYear}-${targetHouse}`;
+
+          if (sourceKey === targetKey) return;
+
+          classData[sourceKey] = (classData[sourceKey] ?? []).filter(id => id !== actorId);
+
+          const targetList = classData[targetKey] ?? [];
+          if (!targetList.includes(actorId)) {
+            targetList.push(actorId);
+            classData[targetKey] = targetList;
+          }
+
+          await ClassesApp.saveClassData(classData);
+          this.render();
+          return;
+        }
+
+        // Cas 2 : nouvel acteur depuis le répertoire Foundry
+        if (raw.type !== "Actor") return;
+        const actorId = raw.uuid?.split(".").pop() ?? raw.id;
+        const targetKey = `${targetYear}-${targetHouse}`;
+        const list = classData[targetKey] ?? [];
         if (!list.includes(actorId)) {
           list.push(actorId);
-          classData[storageKey] = list;
+          classData[targetKey] = list;
           await ClassesApp.saveClassData(classData);
           this.render();
         }
