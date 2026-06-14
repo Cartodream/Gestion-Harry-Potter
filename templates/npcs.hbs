@@ -14,12 +14,12 @@
               <i class="fas fa-times"></i>
             </button>
           {{/if}}
-          <button type="button" class="hp4-note-btn" data-id="{{id}}" title="Notes">
-            <i class="fas fa-pencil-alt"></i>
+          <button type="button" class="hp4-note-btn" data-id="{{id}}" title="Journal">
+            <i class="fas fa-book"></i>
+            {{#if entries.length}}
+              <span class="hp4-note-count">{{entries.length}}</span>
+            {{/if}}
           </button>
-          {{#if note}}
-            <div class="hp4-actor-note">{{note}}</div>
-          {{/if}}
         </div>
       {{else}}
         <p class="hp4-empty">Aucun PNJ rencontré pour l'instant.</p>
@@ -27,14 +27,15 @@
     </div>
   </div>
 
-  <!-- Modal note -->
+  <!-- Modal journal -->
   <div class="hp4-note-modal" style="display:none">
     <div class="hp4-note-modal-inner">
-      <h3>Note sur <span class="hp4-note-actor-name"></span></h3>
-      <textarea class="hp4-note-textarea" rows="5" placeholder="Entrez une note..."></textarea>
+      <h3><i class="fas fa-book"></i> Journal — <span class="hp4-note-actor-name"></span></h3>
+      <div class="hp4-note-journal"></div>
+      <textarea class="hp4-note-textarea" rows="3" placeholder="Ajouter une note..."></textarea>
       <div class="hp4-note-actions">
-        <button type="button" class="hp4-note-save">Enregistrer</button>
-        <button type="button" class="hp4-note-cancel">Annuler</button>
+        <button type="button" class="hp4-note-save">Ajouter</button>
+        <button type="button" class="hp4-note-cancel">Fermer</button>
       </div>
     </div>
   </div>

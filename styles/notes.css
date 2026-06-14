@@ -6,26 +6,28 @@
   font-size: 0.65rem;
   padding: 0;
   margin-top: 2px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .hp4-note-btn:hover { color: #ccc; }
 
-.hp4-actor-note {
-  font-size: 0.65rem;
-  color: #aaa;
-  font-style: italic;
+.hp4-note-count {
+  background: #7b2d2d;
+  color: white;
+  border-radius: 8px;
+  font-size: 0.6rem;
+  padding: 0 4px;
+  min-width: 14px;
   text-align: center;
-  margin-top: 2px;
-  max-width: 70px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .hp4-note-modal {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,7 +39,8 @@
   border: 1px solid #555;
   border-radius: 8px;
   padding: 1rem;
-  width: 320px;
+  width: 380px;
+  max-height: 70vh;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -46,6 +49,61 @@
 .hp4-note-modal-inner h3 {
   margin: 0;
   font-size: 1rem;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.5rem;
+}
+
+/* Journal */
+.hp4-note-journal {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 250px;
+  padding-right: 0.25rem;
+}
+
+.hp4-journal-entry {
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+.hp4-journal-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.7rem;
+}
+
+.hp4-journal-author {
+  font-weight: bold;
+  color: #c9a84c;
+}
+
+.hp4-journal-date {
+  color: #666;
+  flex: 1;
+}
+
+.hp4-journal-delete {
+  background: none;
+  border: none;
+  color: #7b2d2d;
+  cursor: pointer;
+  font-size: 0.65rem;
+  padding: 0;
+}
+
+.hp4-journal-delete:hover { color: #e74c3c; }
+
+.hp4-journal-text {
+  font-size: 0.8rem;
+  color: #ccc;
+  white-space: pre-wrap;
 }
 
 .hp4-note-textarea {
@@ -57,6 +115,7 @@
   padding: 0.5rem;
   resize: vertical;
   font-family: inherit;
+  font-size: 0.85rem;
 }
 
 .hp4-note-actions {

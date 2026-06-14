@@ -24,13 +24,18 @@ export class NpcsApp extends HandlebarsApplicationMixin(ApplicationV2) {
     await game.settings.set(MODULE_ID, "npcs-data", data);
   }
 
-  async _prepareContext() {
+ async _prepareContext() {
   const ids = NpcsApp.getNpcData();
-  const notes = getActorNotes();
+  const all = getActorNotes();
   const npcs = ids
     .map(id => game.actors.get(id))
     .filter(Boolean)
-    .map(a => ({ id: a.id, name: a.name, img: a.img, note: notes[a.id] ?? "" }));
+    .map(a => ({
+      id: a.id,
+      name: a.name,
+      img: a.img,
+      entries: all[a.id] ?? []
+    }));
 
   return { npcs, isGM: game.user.isGM };
 }
