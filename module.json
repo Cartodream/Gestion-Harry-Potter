@@ -13,7 +13,6 @@
     }
   ],
   "esmodules": ["scripts/main.js"],
-"styles": ["styles/main.css", "styles/classes.css", "styles/npcs.css", "styles/houseCup.css", "styles/notes.css", "styles/clubs.css"],  "manifest": "https://raw.githubusercontent.com/Cartodream/Gestion-Harry-Potter/main/module.json",
-  "download": "https://github.com/Cartodream/Gestion-Harry-Potter/archive/refs/heads/main.zip"
+"styles": ["styles/main.css", "styles/classes.css", "styles/npcs.css", "styles/houseCup.css", "styles/notes.css", "styles/clubs.css", "styles/timetable.css"],  "download": "https://github.com/Cartodream/Gestion-Harry-Potter/archive/refs/heads/main.zip"
 }
 

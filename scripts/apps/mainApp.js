@@ -3,6 +3,7 @@ import { ClassesApp } from "./classeApp.js";
 import { NpcsApp } from "./npcsApp.js";
 import { HouseCupApp } from "./houseCupApp.js";
 import { ClubsApp } from "./clubsApp.js";
+import { TimetableApp } from "./timetableApp.js";
 
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -46,7 +47,8 @@ this.element.querySelector("[data-action='open-house-cup']")
 
     this.element.querySelector("[data-action='open-timetable']")
       ?.addEventListener("click", () => {});
-
+this.element.querySelector("[data-action='open-timetable']")
+  ?.addEventListener("click", () => new TimetableApp().render(true));
     this.element.querySelector("[data-action='open-npcs']")
       ?.addEventListener("click", () => {});
 
